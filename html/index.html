@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>数据展示</title>
+    <link rel="icon" href="data:;base64,=">
+    <script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.3.0/echarts-en.min.js"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+<div class="container-fluid" style="padding-top: 10px;">
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs row" role="tablist">
+        <li role="presentation" class="active  col-md-offset-5 col-md-1 text-center"><a href="#home"
+                                                                                        aria-controls="home" role="tab"
+                                                                                        data-toggle="tab">折线图</a></li>
+        <li role="presentation" class="col-md-1 text-center"><a href="#profile" aria-controls="profile" role="tab"
+                                                                data-toggle="tab">表格</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content row">
+        <div role="tabpanel" class="tab-pane active" id="home">
+
+            <h2>''' + time + '''</h2>
+            <div style="width:400px;margin:10px auto">
+                <form method="post">
+                    请选择日期: <input type="date" name="user_date" value="''' + time + '''"/>
+                    <input type="submit"/>
+                </form>
+            </div>
+            <div id="main" style="width: 1200px;height:400px;margin:0 auto"></div>
+            <div style="width:250px;margin:0 auto">
+                <a href="?user_date=''' + previous + '''">
+                    <button>前一天</button>
+                </a>
+                <a href="?user_date=''' + latter + '''">
+                    <button>后一天</button>
+                </a>
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="profile">
+            <h1>表格</h1>
+            <table class="table table-condensed table-striped">
+                <tr>
+                    <th>Month</th>
+                    <th>Savings</th>
+                    <th>Month</th>
+                    <th>Savings</th>
+                    <th>Month</th>
+                    <th>Savings</th>
+                </tr>
+                <tr>
+                    <td>January</td>
+                    <td>$100</td>
+                    <td>January</td>
+                    <td>$100</td>
+                    <td>January</td>
+                    <td>$100</td>
+                </tr>
+                <tr>
+                    <td>January</td>
+                    <td>$100</td>
+                    <td>January</td>
+                    <td>$100</td>
+                    <td>January</td>
+                    <td>$100</td>
+                </tr>
+                <tr>
+                    <td>January</td>
+                    <td>$100</td>
+                    <td>January</td>
+                    <td>$100</td>
+                    <td>January</td>
+                    <td>$100</td>
+                </tr>
+                <tr>
+                    <td>January</td>
+                    <td>$100</td>
+                    <td>January</td>
+                    <td>$100</td>
+                    <td>January</td>
+                    <td>$100</td>
+                </tr>
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+    $.ajax({
+        url: 'deal.py',
+        data: {time: '2019-10-11'},
+        dataType: 'json',
+        success: function (data) {
+            console.log(data)
+            console.log(data.date)
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('main'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                tooltip: {
+                    show: true,
+                    trigger: 'axis',
+                },
+                xAxis: {
+                    name: "日期",
+                    nameLocation: "end",
+                    data: data.date,
+                    type: "category",
+                },
+                yAxis: {
+                    type: "value",
+                    name: "数量"
+                },
+                series: [
+                    {
+                        data: data.count,
+                        type: "line"
+                    }
+                ]
+            };
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+
+        }
+    })
+
+
+</script>
+</body>
+</html>
